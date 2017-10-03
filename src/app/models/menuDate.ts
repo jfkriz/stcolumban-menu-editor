@@ -1,21 +1,61 @@
+import { MenuItem } from './menuItem';
+
 export class MenuDate {
-  get entree(): string {
-    return this._entrees.join(';');
-  }
-  set entree(entree: string) {
-    this._entrees = entree.split(';');
+  constructor(json: any) {
+    if (json) {
+      const obj = typeof(json) === 'string' ? JSON.parse(json) : json;
+      Object.assign(this, obj);
+    }
   }
 
-  private _entrees: string [];
+  get entree(): string {
+    return this.entrees.join(';');
+  }
+  set entree(entree: string) {
+    this.entrees = entree.split(';');
+  }
+
+  private _entrees: MenuItem[];
   get entrees(): string [] {
+    return this._entrees.map(i => i.id);
+  }
+  get entreesObj(): MenuItem[] {
     return this._entrees;
   }
   set entrees(entrees: string []) {
+    this._entrees = entrees.map(i => new MenuItem({id: i}));
+  }
+  set entreesObj(entrees: MenuItem[]) {
     this._entrees = entrees;
   }
 
-  public veggie: string;
-  public treat: string;
+  private _veggie: MenuItem = new MenuItem();
+  get veggie(): string {
+    return this._veggie.id;
+  }
+  get veggieObj(): MenuItem {
+    return this._veggie;
+  }
+  set veggie(veggie: string) {
+    this._veggie.id = veggie;
+  }
+  set veggieObj(veggie: MenuItem) {
+    this._veggie = veggie;
+  }
+
+  public _treat: MenuItem = new MenuItem();
+  get treat(): string {
+    return this._treat.id;
+  }
+  get treatObj(): MenuItem {
+    return this._treat;
+  }
+  set treat(treat: string) {
+    this._treat.id = treat;
+  }
+  set treatObj(treat: MenuItem) {
+    this._treat = treat;
+  }
 
   public originalEntrees: string[];
   public originalVeggie: string;

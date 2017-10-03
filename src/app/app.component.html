@@ -91,36 +91,63 @@
     <div class="col-md-12">
       <div class="panel panel-default" data-role="panel">
         <div class="panel-heading" (click)="isDaysCollapsed = !isDaysCollapsed">Menu Days</div>
-        <div class="panel-body" [collapse]="isDaysCollapsed">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Entree</th>
-                <th>Veggie</th>
-                <th>Treat</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let date of menuData.dates | objectValues">
-                <td>{{date.key}}</td>
-                <td *ngIf="!date.val.editing">{{date.val.entree | menuItem:menuData.entrees}}</td>
-                <td *ngIf="!date.val.editing">{{date.val.veggie | menuItem:menuData.veggies}}</td>
-                <td *ngIf="!date.val.editing">{{date.val.treat | menuItem:menuData.treats}}</td>
-                <td *ngIf="!date.val.editing">
-                  <i class="fa fa-pencil" aria-hidden="true" (click)="editDate(date.val)"></i>
-                  <i class="fa fa-trash" aria-hidden="true" (click)="deleteDate(date.key)"></i>
-                </td>
-                <td *ngIf="date.val.editing">
-                  <i class="fa fa-check" aria-hidden="true" (click)="confirmEditDate(date.val)"></i>
-                  <i class="fa fa-ban" aria-hidden="true" (click)="cancelEditDate(date.val)"></i>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <button type="button" class="btn add-item" data-item-type='treat'>Add Item</button>
-        </div>
+        <form>
+          <div class="panel-body" [collapse]="isDaysCollapsed">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Entree</th>
+                  <th>Veggie</th>
+                  <th>Treat</th>
+                  <th></th>
+                </tr>
+              </thead>
+                <tbody>
+                  <tr *ngFor="let date of menuData.dates | objectValues">
+                    <td>{{date.key}}</td>
+                    <td>
+                      <span *ngIf="!date.val.editing">{{date.val.entree | menuItem:menuData.entrees}}</span>
+                      <span *ngIf="date.val.editing">Edit: {{date.val.entree | menuItem:menuData.entrees}}</span>
+                      <ng-select *ngIf="date.val.editing"
+                        [multiple]="true"
+                        [items]="menuData.entrees"
+                        (data)="updateMenuDate($event, date.val.entreesObj)"
+                        [active]="date.val.entrees ? date.val.entreesObj : undefined">
+                      </ng-select>
+                    </td>
+                    <td>
+                      <span *ngIf="!date.val.editing">{{date.val.veggie | menuItem:menuData.veggies}}</span>
+                      <ng-select *ngIf="date.val.editing"
+                        [multiple]="false"
+                        [items]="menuData.veggies"
+                        (data)="updateMenuDate($event, date.val.veggieObj)"
+                        [active]="date.val.veggie ? [ date.val.veggieObj ] : undefined">
+                      </ng-select>
+                    </td>
+                    <td>
+                      <span *ngIf="!date.val.editing">{{date.val.treat | menuItem:menuData.treats}}</span>
+                      <ng-select *ngIf="date.val.editing"
+                        [multiple]="false"
+                        [items]="menuData.treats"
+                        (data)="updateMenuDate($event, date.val.treatObj)"
+                        [active]="date.val.treat ? [ date.val.treatObj ] : undefined">
+                      </ng-select>
+                    </td>
+                    <td *ngIf="!date.val.editing">
+                      <i class="fa fa-pencil" aria-hidden="true" (click)="editDate(date.val)"></i>
+                      <i class="fa fa-trash" aria-hidden="true" (click)="deleteDate(date.key)"></i>
+                    </td>
+                    <td *ngIf="date.val.editing">
+                      <i class="fa fa-check" aria-hidden="true" (click)="confirmEditDate(date.val)"></i>
+                      <i class="fa fa-ban" aria-hidden="true" (click)="cancelEditDate(date.val)"></i>
+                    </td>
+                  </tr>
+              </tbody>
+            </table>
+            <button type="button" class="btn add-item" data-item-type='treat'>Add Item</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

@@ -3,7 +3,7 @@ import {Pipe, PipeTransform} from '@angular/core';
 @Pipe({name: 'mapValues', pure: false})
 export class MapValuesPipe implements PipeTransform {
     transform(value: any, args?: any[]): Object[] {
-        let returnArray = [];
+        const returnArray = [];
 
         value.forEach((entryVal, entryKey) => {
             returnArray.push({
