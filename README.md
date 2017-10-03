@@ -22,6 +22,10 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 
 Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
+## Deploy
+
+Deploy this on Github Pages by first building a production version with `ng build --prod --base-href "https://jfkriz.github.io/stcolumban-menu-editor/"`, then using [angular-cli-ghpages](https://github.com/angular-buch/angular-cli-ghpages) and running `angular-cli-ghpages`.  Before doing this the first time, you will need to globally install angular-cli-ghpages with `npm i -g angular-cli-ghpages`.
+
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
