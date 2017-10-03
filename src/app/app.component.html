@@ -1,30 +1,8 @@
-<div class='container-fluid'>
-  <div class='row'>
-    <div class="col-md-12">
-      <div class="panel panel-default" data-role="panel">
-        <div class="panel-heading" (click)="isEntreesCollapsed = !isEntreesCollapsed">Entrees</div>
-        <div class="panel-body" [collapse]="isEntreesCollapsed">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Description</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-          <button type="button" class="btn add-item" data-item-type='entree'>Add Item</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class='row'>
-    <div class="col-md-12">
-      <div class="panel panel-default" data-role="panel">
-        <div class="panel-heading" (click)="isVeggiesCollapsed = !isVeggiesCollapsed">Veggies</div>
-        <div class="panel-body" [collapse]="isVeggiesCollapsed">
-          <table class="table table-striped">
+<div class='container-fluid' *ngIf="isReady">
+  <div class="panel panel-default">
+    <tabset>
+      <tab heading="Entrees">
+        <table class="table table-striped">
             <thead>
               <tr>
                 <th>ID</th>
@@ -33,19 +11,26 @@
               </tr>
             </thead>
             <tbody>
+              <tr *ngFor="let item of menuData.entrees">
+                <td *ngIf="!item.editing">{{item.id}}</td>
+                <td *ngIf="!item.editing">{{item.description}}</td>
+                <td *ngIf="item.editing"><input type="text" [(ngModel)]="item.id" /></td>
+                <td *ngIf="item.editing"><input type="text" [(ngModel)]="item.description" /></td>
+                <td *ngIf="!item.editing">
+                  <i class="fa fa-pencil" aria-hidden="true" (click)="editItem(item)"></i>
+                  <i class="fa fa-trash" aria-hidden="true" (click)="deleteItem(menuData.entrees, item)"></i>
+                </td>
+                <td *ngIf="item.editing">
+                  <i class="fa fa-check" aria-hidden="true" (click)="confirmEditItem(menuData.entrees, item)"></i>
+                  <i class="fa fa-ban" aria-hidden="true" (click)="cancelEditItem(item)"></i>
+                </td>
+              </tr>
             </tbody>
           </table>
-          <button type="button" class="btn add-item" data-item-type='veggie'>Add Item</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class='row'>
-    <div class="col-md-12">
-      <div class="panel panel-default" data-role="panel">
-        <div class="panel-heading" (click)="isTreatsCollapsed = !isTreatsCollapsed">Treats</div>
-        <div class="panel-body" [collapse]="isTreatsCollapsed">
-          <table class="table table-striped">
+          <button type="button" class="btn add-item" data-item-type='entree'>Add Item</button>
+      </tab>
+      <tab heading="Veggies">
+        <table class="table table-striped">
             <thead>
               <tr>
                 <th>ID</th>
@@ -53,7 +38,70 @@
                 <th></th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              <tr *ngFor="let item of menuData.veggies">
+                <td>{{item.id}}</td>
+                <td>{{item.description}}</td>
+                <td>
+                  <i class="fa fa-pencil" aria-hidden="true" (click)="editItem(menuData.veggies, item)"></i>
+                  <i class="fa fa-trash" aria-hidden="true" (click)="deleteItem(menuData.veggies, item)"></i>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button type="button" class="btn add-item" data-item-type='veggie'>Add Item</button>
+      </tab>
+      <tab heading="Treats">
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Description</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of menuData.treats">
+                <td>{{item.id}}</td>
+                <td>{{item.description}}</td>
+                <td>
+                  <i class="fa fa-pencil" aria-hidden="true" (click)="editItem(menuData.treats, item)"></i>
+                  <i class="fa fa-trash-o" aria-hidden="true" (click)="deleteItem(menuData.treats, item)"></i>
+                </td>
+              </tr>              
+            </tbody>
+          </table>
+          <button type="button" class="btn add-item" data-item-type='treat'>Add Item</button>
+      </tab>
+    </tabset>
+  </div>
+  <div class='row'>
+    <div class="col-md-12">
+      <div class="panel panel-default" data-role="panel">
+        <div class="panel-heading" (click)="isDaysCollapsed = !isDaysCollapsed">Menu Days</div>
+        <div class="panel-body" [collapse]="isDaysCollapsed">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Entree</th>
+                <th>Veggie</th>
+                <th>Treat</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let date of menuData.dates | objectValues">
+                <td>{{date.key}}</td>
+                <td>{{date.val.entree | menuItem:menuData.entrees}}</td>
+                <td>{{date.val.veggie | menuItem:menuData.veggies}}</td>
+                <td>{{date.val.treat | menuItem:menuData.treats}}</td>
+                <td>
+                  <i class="fa fa-pencil" aria-hidden="true" (click)="editDate(date)"></i>&nbsp;
+                  <i class="fa fa-trash" aria-hidden="true" (click)="deleteDate(date.key)"></i>
+                </td>
+              </tr>
+            </tbody>
           </table>
           <button type="button" class="btn add-item" data-item-type='treat'>Add Item</button>
         </div>
@@ -62,12 +110,12 @@
   </div>
   <div class='row'>
     <div class="col-md-12">
-      <div id="panel2" class="panel panel-default" data-role="panel">
+      <div class="panel panel-default" data-role="panel">
         <div class="panel-heading" (click)="isJsonCollapsed = !isJsonCollapsed">JSON Menu</div>
         <div class="panel-body" [collapse]="isJsonCollapsed">
           <div class="form-group">
             <label class="control-label-left" for="json">JSON</label>
-            <textarea id="json" type="textarea" rows="50" class="form-control"></textarea>
+            <textarea id="json" type="textarea" rows="50" class="form-control">{{getJsonMenu()}}</textarea>
           </div>
         </div>
       </div>
