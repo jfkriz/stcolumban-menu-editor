@@ -16,4 +16,9 @@ export class MenuDate {
 
   public veggie: string;
   public treat: string;
+
+  public originalEntrees: string[];
+  public originalVeggie: string;
+  public originalTreat: string;
+  public editing: boolean;
 }

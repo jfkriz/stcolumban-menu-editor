@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuData } from './models/menuData';
+import { MenuDate } from './models/menuDate';
 import { MenuItem } from './models/menuItem';
 import { HttpClient } from '@angular/common/http';
 
@@ -65,6 +66,27 @@ export class AppComponent implements OnInit {
     item.description = item.originalDescription;
     item.id = item.originalId;
     item.editing = false;
+  }
+
+  editDate(date: MenuDate) {
+    date.originalEntrees = date.entrees;
+    date.originalVeggie = date.veggie;
+    date.originalTreat = date.treat;
+    date.editing = true;
+  }
+
+  confirmEditDate(date: MenuDate) {
+    date.originalEntrees = undefined;
+    date.originalVeggie = undefined;
+    date.originalTreat = undefined;
+    date.editing = false;
+  }
+
+  cancelEditDate(date: MenuDate) {
+    date.entrees = date.originalEntrees;
+    date.veggie = date.originalVeggie;
+    date.treat = date.originalTreat;
+    date.editing = false;
   }
 
   ngOnInit() {

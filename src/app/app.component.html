@@ -5,7 +5,7 @@
         <table class="table table-striped">
             <thead>
               <tr>
-                <th>ID</th>
+                <th>Name</th>
                 <th>Description</th>
                 <th></th>
               </tr>
@@ -14,8 +14,8 @@
               <tr *ngFor="let item of menuData.entrees">
                 <td *ngIf="!item.editing">{{item.id}}</td>
                 <td *ngIf="!item.editing">{{item.description}}</td>
-                <td *ngIf="item.editing"><input type="text" [(ngModel)]="item.id" /></td>
-                <td *ngIf="item.editing"><input type="text" [(ngModel)]="item.description" /></td>
+                <td *ngIf="item.editing"><input type="text" class="form-control" [(ngModel)]="item.id" /></td>
+                <td *ngIf="item.editing"><input type="text" class="form-control" [(ngModel)]="item.description" /></td>
                 <td *ngIf="!item.editing">
                   <i class="fa fa-pencil" aria-hidden="true" (click)="editItem(item)"></i>
                   <i class="fa fa-trash" aria-hidden="true" (click)="deleteItem(menuData.entrees, item)"></i>
@@ -33,18 +33,24 @@
         <table class="table table-striped">
             <thead>
               <tr>
-                <th>ID</th>
+                <th>Name</th>
                 <th>Description</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let item of menuData.veggies">
-                <td>{{item.id}}</td>
-                <td>{{item.description}}</td>
-                <td>
-                  <i class="fa fa-pencil" aria-hidden="true" (click)="editItem(menuData.veggies, item)"></i>
+                <td *ngIf="!item.editing">{{item.id}}</td>
+                <td *ngIf="!item.editing">{{item.description}}</td>
+                <td *ngIf="item.editing"><input type="text" class="form-control" [(ngModel)]="item.id" /></td>
+                <td *ngIf="item.editing"><input type="text" class="form-control" [(ngModel)]="item.description" /></td>
+                <td *ngIf="!item.editing">
+                  <i class="fa fa-pencil" aria-hidden="true" (click)="editItem(item)"></i>
                   <i class="fa fa-trash" aria-hidden="true" (click)="deleteItem(menuData.veggies, item)"></i>
+                </td>
+                <td *ngIf="item.editing">
+                  <i class="fa fa-check" aria-hidden="true" (click)="confirmEditItem(menuData.veggies, item)"></i>
+                  <i class="fa fa-ban" aria-hidden="true" (click)="cancelEditItem(item)"></i>
                 </td>
               </tr>
             </tbody>
@@ -55,20 +61,26 @@
         <table class="table table-striped">
             <thead>
               <tr>
-                <th>ID</th>
+                <th>Name</th>
                 <th>Description</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let item of menuData.treats">
-                <td>{{item.id}}</td>
-                <td>{{item.description}}</td>
-                <td>
-                  <i class="fa fa-pencil" aria-hidden="true" (click)="editItem(menuData.treats, item)"></i>
-                  <i class="fa fa-trash-o" aria-hidden="true" (click)="deleteItem(menuData.treats, item)"></i>
+                <td *ngIf="!item.editing">{{item.id}}</td>
+                <td *ngIf="!item.editing">{{item.description}}</td>
+                <td *ngIf="item.editing"><input type="text" class="form-control" [(ngModel)]="item.id" /></td>
+                <td *ngIf="item.editing"><input type="text" class="form-control" [(ngModel)]="item.description" /></td>
+                <td *ngIf="!item.editing">
+                  <i class="fa fa-pencil" aria-hidden="true" (click)="editItem(item)"></i>
+                  <i class="fa fa-trash" aria-hidden="true" (click)="deleteItem(menuData.treats, item)"></i>
                 </td>
-              </tr>              
+                <td *ngIf="item.editing">
+                  <i class="fa fa-check" aria-hidden="true" (click)="confirmEditItem(menuData.treats, item)"></i>
+                  <i class="fa fa-ban" aria-hidden="true" (click)="cancelEditItem(item)"></i>
+                </td>
+              </tr>
             </tbody>
           </table>
           <button type="button" class="btn add-item" data-item-type='treat'>Add Item</button>
@@ -93,12 +105,16 @@
             <tbody>
               <tr *ngFor="let date of menuData.dates | objectValues">
                 <td>{{date.key}}</td>
-                <td>{{date.val.entree | menuItem:menuData.entrees}}</td>
-                <td>{{date.val.veggie | menuItem:menuData.veggies}}</td>
-                <td>{{date.val.treat | menuItem:menuData.treats}}</td>
-                <td>
-                  <i class="fa fa-pencil" aria-hidden="true" (click)="editDate(date)"></i>&nbsp;
+                <td *ngIf="!date.val.editing">{{date.val.entree | menuItem:menuData.entrees}}</td>
+                <td *ngIf="!date.val.editing">{{date.val.veggie | menuItem:menuData.veggies}}</td>
+                <td *ngIf="!date.val.editing">{{date.val.treat | menuItem:menuData.treats}}</td>
+                <td *ngIf="!date.val.editing">
+                  <i class="fa fa-pencil" aria-hidden="true" (click)="editDate(date.val)"></i>
                   <i class="fa fa-trash" aria-hidden="true" (click)="deleteDate(date.key)"></i>
+                </td>
+                <td *ngIf="date.val.editing">
+                  <i class="fa fa-check" aria-hidden="true" (click)="confirmEditDate(date.val)"></i>
+                  <i class="fa fa-ban" aria-hidden="true" (click)="cancelEditDate(date.val)"></i>
                 </td>
               </tr>
             </tbody>
