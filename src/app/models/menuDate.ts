@@ -1,10 +1,14 @@
 import { MenuItem } from './menuItem';
 
 export class MenuDate {
-  constructor(json: any) {
+  constructor(json: any = null) {
     if (json) {
       const obj = typeof(json) === 'string' ? JSON.parse(json) : json;
       Object.assign(this, obj);
+    } else {
+      this._entrees = [];
+      this._veggie = new MenuItem();
+      this._treat = new MenuItem();
     }
   }
 
@@ -57,8 +61,10 @@ export class MenuDate {
     this._treat = treat;
   }
 
+  public originalDate: Date;
   public originalEntrees: string[];
   public originalVeggie: string;
   public originalTreat: string;
   public editing: boolean;
+  public allowEditDate: boolean;
 }

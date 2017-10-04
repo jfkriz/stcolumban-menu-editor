@@ -68,24 +68,25 @@ export class AppComponent implements OnInit {
     item.editing = false;
   }
 
-  editDate(date: MenuDate) {
-    const entrees = this.menuData.entrees.filter(i => date.entrees.indexOf(i.id) >= 0);
+  editDate(menuDate: MenuDate, allowEditDate: boolean = false) {
+    const entrees = menuDate.entrees ? this.menuData.entrees.filter(i => menuDate.entrees.indexOf(i.id) >= 0) : undefined;
     if (entrees) {
-      date.entreesObj = entrees.map(e => new MenuItem(e));
+      menuDate.entreesObj = entrees.map(e => new MenuItem(e));
     }
-    const treat = this.menuData.treats.find(i => i.id === date.treatObj.id);
+    const treat = menuDate.treat ? this.menuData.treats.find(i => i.id === menuDate.treatObj.id) : undefined;
     if (treat) {
-      date.treatObj = new MenuItem(treat);
+      menuDate.treatObj = new MenuItem(treat);
     }
-    const veggie = date.veggieObj = this.menuData.veggies.find(i => i.id === date.veggieObj.id);
+    const veggie = menuDate.veggie ? this.menuData.veggies.find(i => i.id === menuDate.veggieObj.id) : undefined;
     if (veggie) {
-      date.veggieObj = new MenuItem(veggie);
+      menuDate.veggieObj = new MenuItem(veggie);
     }
 
-    date.originalEntrees = date.entrees;
-    date.originalVeggie = date.veggie;
-    date.originalTreat = date.treat;
-    date.editing = true;
+    menuDate.originalEntrees = menuDate.entrees;
+    menuDate.originalVeggie = menuDate.veggie;
+    menuDate.originalTreat = menuDate.treat;
+    menuDate.editing = true;
+    menuDate.allowEditDate = allowEditDate;
   }
 
   confirmEditDate(date: MenuDate) {
@@ -93,6 +94,7 @@ export class AppComponent implements OnInit {
     date.originalVeggie = undefined;
     date.originalTreat = undefined;
     date.editing = false;
+    date.allowEditDate = false;
   }
 
   cancelEditDate(date: MenuDate) {
@@ -103,6 +105,7 @@ export class AppComponent implements OnInit {
     date.originalVeggie = undefined;
     date.originalTreat = undefined;
     date.editing = false;
+    date.allowEditDate = false;
   }
 
   updateMenuDate($event: any, item: any) {
@@ -112,6 +115,23 @@ export class AppComponent implements OnInit {
     } else {
       item.id = $event.id;
     }
+  }
+
+  addNewEntree() {
+    this.editItem(this.menuData.addNewEntree());
+  }
+
+  addNewVeggie() {
+    this.editItem(this.menuData.addNewVeggie());
+  }
+
+  addNewTreat() {
+    this.editItem(this.menuData.addNewTreat());
+  }
+
+  addNewMenuDate() {
+    const newDate = new Date(new Date().setHours(0, 0, 0, 0));
+    this.editDate(this.menuData.addNewMenuDate(newDate), true);
   }
 
   ngOnInit() {
