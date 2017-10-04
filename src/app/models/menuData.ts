@@ -1,21 +1,22 @@
+import { BaseModel } from './baseModel';
 import { MenuItem } from './menuItem';
 import { MenuDate } from './menuDate';
 import * as moment from 'moment';
 
-export class MenuData {
+export class MenuData extends BaseModel {
   public entrees: Array<MenuItem>;
   public veggies: Array<MenuItem>;
   public treats: Array<MenuItem>;
-  public dates: Map<Date, MenuDate>;
+  public dates: Array<MenuDate>;
 
   constructor(json: any = null) {
+    super();
     if (json) {
       const obj = typeof(json) === 'string' ? JSON.parse(json) : json;
       this.entrees = obj.entrees.map(i => new MenuItem(i));
       this.veggies = obj.veggies.map(i => new MenuItem(i));
       this.treats = obj.treats.map(i => new MenuItem(i));
-      this.dates = new Map<Date, MenuDate>();
-      Object.keys(obj.dates).forEach(key => this.dates[key] = new MenuDate(obj.dates[key]));
+      this.dates = obj.dates.map(i => new MenuDate(i));
     }
   }
 
@@ -51,13 +52,9 @@ export class MenuData {
 
   public addNewMenuDate(date: Date): MenuDate {
     const menuDate = new MenuDate();
+    menuDate.date = date;
 
-    const key = moment(date).format('M/D/YYYY');
-    this.dates[key] = menuDate;
+    this.dates.push.apply(this.dates, [menuDate]);
     return menuDate;
-  }
-
-  public getDates(): [Date, MenuDate][] {
-    return Array.from(this.dates);
   }
 }

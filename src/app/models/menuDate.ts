@@ -1,7 +1,10 @@
+import { BaseModel } from './baseModel';
 import { MenuItem } from './menuItem';
+import * as moment from 'moment';
 
-export class MenuDate {
+export class MenuDate extends BaseModel {
   constructor(json: any = null) {
+    super();
     if (json) {
       const obj = typeof(json) === 'string' ? JSON.parse(json) : json;
       Object.assign(this, obj);
@@ -9,6 +12,7 @@ export class MenuDate {
       this._entrees = [];
       this._veggie = new MenuItem();
       this._treat = new MenuItem();
+      this.date = new Date();
     }
   }
 
@@ -61,10 +65,29 @@ export class MenuDate {
     this._treat = treat;
   }
 
+  private _date: string;
+  set date(d: string|Date) {
+    if (typeof(d) === 'string' || Object.prototype.toString.call(d) === '[object Date]') {
+      this._date = moment(d).format('M/D/YYYY');
+    } else {
+      this._date = undefined;
+    }
+  }
+  get date(): string|Date {
+    return this._date;
+  }
+  get dateSort(): string {
+    return moment(this._date, 'M/D/YYYY').format('YYYY/MM/DD');
+  }
+
   public originalDate: Date;
   public originalEntrees: string[];
   public originalVeggie: string;
   public originalTreat: string;
   public editing: boolean;
   public allowEditDate: boolean;
+
+  getJSONKeys(): string[] {
+    return [ 'date', 'entree', 'veggie', 'treat' ];
+  }
 }

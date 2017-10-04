@@ -1,13 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Observable } from 'rxJs';
 import { MenuData } from './models/menuData';
 import { MenuDate } from './models/menuDate';
 import { MenuItem } from './models/menuItem';
 import { HttpClient } from '@angular/common/http';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class AppComponent implements OnInit {
   title = 'app';
@@ -30,8 +33,13 @@ export class AppComponent implements OnInit {
     items.push.apply(items, filtered);
   }
 
-  deleteDate(date: Date) {
-    delete this.menuData.dates[date.toString()];
+  deleteDate(menuDate: MenuDate) {
+    const dates = this.menuData.dates;
+    const filtered = dates.filter(val => {
+      return val.date !== menuDate.date;
+    });
+    dates.length = 0;
+    dates.push.apply(dates, filtered);
   }
 
   getJsonMenu() {
@@ -113,7 +121,8 @@ export class AppComponent implements OnInit {
       item.length = 0;
       item.push.apply(item, $event.map(e => new MenuItem(e)));
     } else {
-      item.id = $event.id;
+      Object.assign(item, $event);
+      // item.id = $event.id;
     }
   }
 
@@ -130,13 +139,21 @@ export class AppComponent implements OnInit {
   }
 
   addNewMenuDate() {
-    const newDate = new Date(new Date().setHours(0, 0, 0, 0));
-    this.editDate(this.menuData.addNewMenuDate(newDate), true);
+    const maxDate = this.menuData.dates.sort((a, b) => {
+      return a.dateSort.localeCompare(b.dateSort);
+    }).pop().date;
+
+    let newDate = moment(maxDate, 'M/D/YYYY');
+    do {
+      newDate = newDate.add(1, 'd');
+    } while (newDate.day() === 0 || newDate.day() === 6);
+    this.editDate(this.menuData.addNewMenuDate(newDate.toDate()), true);
   }
 
   ngOnInit() {
-    this.http.get('https://s3.amazonaws.com/lambda-function-bucket-us-east-1-1486176755721/SaintColumban/menu.json').subscribe(data => {
-      this.menuData = new MenuData(data);
+    this.http.get('https://s3.amazonaws.com/lambda-function-bucket-us-east-1-1486176755721/SaintColumban/menu2.json').subscribe(data => {
+      const menu = new MenuData(data);
+      this.menuData = menu;
       this.isReady = true;
     });
   }
