@@ -4,6 +4,9 @@ import { MenuItem } from '../models/menuItem';
 @Pipe({ name: 'menuItem', pure: true })
 export class MenuItemPipe implements PipeTransform {
     transform(value: string, items: MenuItem[], defaultValue: any = null): any {
+      if(!value) {
+        return undefined;
+      }
       const keys = value.split(';');
       const found = items.filter(i => keys.indexOf(i.id) >= 0);
       if (found.length === 0) {

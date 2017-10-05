@@ -5,6 +5,7 @@ import { MenuDate } from './models/menuDate';
 import { MenuItem } from './models/menuItem';
 import { HttpClient } from '@angular/common/http';
 import * as moment from 'moment';
+import * as AWS from 'aws-sdk';
 
 @Component({
   selector: 'app-root',
@@ -12,16 +13,18 @@ import * as moment from 'moment';
   styleUrls: ['./app.component.css'],
   changeDetection: ChangeDetectionStrategy.Default
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'app';
   public isDaysCollapsed: boolean;
   public isJsonCollapsed: boolean;
+  public menuUrl: string;
   public menuData: MenuData;
   public isReady: boolean;
 
   constructor(private http: HttpClient) {
     this.isDaysCollapsed = false;
     this.isJsonCollapsed = true;
+    this.menuUrl = 'https://s3.amazonaws.com/lambda-function-bucket-us-east-1-1486176755721/SaintColumban/menu.json';
     this.isReady = false;
   }
 
@@ -141,7 +144,7 @@ export class AppComponent implements OnInit {
   addNewMenuDate() {
     const maxDate = this.menuData.dates.sort((a, b) => {
       return a.dateSort.localeCompare(b.dateSort);
-    }).pop().date;
+    }).slice(-1)[0].date;
 
     let newDate = moment(maxDate, 'M/D/YYYY');
     do {
@@ -150,8 +153,12 @@ export class AppComponent implements OnInit {
     this.editDate(this.menuData.addNewMenuDate(newDate.toDate()), true);
   }
 
-  ngOnInit() {
-    this.http.get('https://s3.amazonaws.com/lambda-function-bucket-us-east-1-1486176755721/SaintColumban/menu2.json').subscribe(data => {
+  // ngOnInit() {
+  //   this.loadMenu();
+  // }
+
+  public loadMenu() {
+    this.http.get(this.menuUrl).subscribe(data => {
       const menu = new MenuData(data);
       this.menuData = menu;
       this.isReady = true;

@@ -1,4 +1,12 @@
-<div class='container-fluid' *ngIf="isReady">
+<div class='container'>
+  <form>
+    <div class='form-group'>
+      <input type='text' class='form-control' id='menuJson' name='menuJson' [(ngModel)]="menuUrl" value="{{menuUrl}}">
+      <button type='button' class='btn btn-primary' (click)='loadMenu()'>Load Menu</button>
+    </div>
+  </form>
+</div>
+<div class='container' *ngIf="isReady">
   <div class="panel panel-default">
     <div class="panel-body">
       <tabset>
