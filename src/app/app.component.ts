@@ -5,7 +5,6 @@ import { MenuDate } from './models/menuDate';
 import { MenuItem } from './models/menuItem';
 import { HttpClient } from '@angular/common/http';
 import * as moment from 'moment';
-import * as AWS from 'aws-sdk';
 
 @Component({
   selector: 'app-root',
@@ -153,9 +152,9 @@ export class AppComponent {
     this.editDate(this.menuData.addNewMenuDate(newDate.toDate()), true);
   }
 
-  // ngOnInit() {
-  //   this.loadMenu();
-  // }
+  ngOnInit() {
+    this.loadMenu();
+  }
 
   public loadMenu() {
     this.http.get(this.menuUrl).subscribe(data => {
