@@ -124,8 +124,8 @@
                       <i class="fa fa-ban" aria-hidden="true" (click)="cancelEditDate(date)"></i>
                     </td>
                     <td>
-                      <span *ngIf="!date.editing || !date.allowEditDate">{{date.date}}</span>
-                      <span *ngIf="date.editing && date.allowEditDate"><input type="text" class="form-control" [(ngModel)]="date.dateObj" id="entryDate" name="entryDate" bsDatepicker  ></span>
+                      <span *ngIf="!date.editing">{{date.date}}</span>
+                      <span *ngIf="date.editing"><input type="text" class="form-control" [(ngModel)]="date.dateObj" id="entryDate" name="entryDate" bsDatepicker  ></span>
                     </td>
                     <td>
                       <span *ngIf="!date.editing">{{date.entree | menuItem:menuData.entrees}}</span>

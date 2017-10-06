@@ -79,7 +79,7 @@ export class AppComponent implements OnInit {
     item.editing = false;
   }
 
-  editDate(menuDate: MenuDate, allowEditDate: boolean = false) {
+  editDate(menuDate: MenuDate) {
     const entrees = menuDate.entrees ? this.menuData.entrees.filter(i => menuDate.entrees.indexOf(i.id) >= 0) : undefined;
     if (entrees) {
       menuDate.entreesObj = entrees.map(e => new MenuItem(e));
@@ -93,30 +93,31 @@ export class AppComponent implements OnInit {
       menuDate.veggieObj = new MenuItem(veggie);
     }
 
+    menuDate.originalDate = moment(menuDate.dateObj).toDate();
     menuDate.originalEntrees = menuDate.entrees;
     menuDate.originalVeggie = menuDate.veggie;
     menuDate.originalTreat = menuDate.treat;
     menuDate.editing = true;
-    menuDate.allowEditDate = allowEditDate;
   }
 
   confirmEditDate(date: MenuDate) {
+    date.originalDate = undefined;
     date.originalEntrees = undefined;
     date.originalVeggie = undefined;
     date.originalTreat = undefined;
     date.editing = false;
-    date.allowEditDate = false;
   }
 
   cancelEditDate(date: MenuDate) {
     date.entrees = date.originalEntrees;
     date.veggie = date.originalVeggie;
     date.treat = date.originalTreat;
+    date.date = moment(date.originalDate).toDate();
     date.originalEntrees = undefined;
     date.originalVeggie = undefined;
     date.originalTreat = undefined;
+    date.originalDate = undefined;
     date.editing = false;
-    date.allowEditDate = false;
   }
 
   updateMenuDate($event: any, item: any) {
@@ -150,7 +151,7 @@ export class AppComponent implements OnInit {
     do {
       newDate = newDate.add(1, 'd');
     } while (newDate.day() === 0 || newDate.day() === 6);
-    this.editDate(this.menuData.addNewMenuDate(newDate.toDate()), true);
+    this.editDate(this.menuData.addNewMenuDate(newDate.toDate()));
   }
 
   copySuccess() {
