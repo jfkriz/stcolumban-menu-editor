@@ -52,9 +52,13 @@ export class MenuData extends BaseModel {
 
   public addNewMenuDate(date: Date): MenuDate {
     const menuDate = new MenuDate();
-    menuDate.date = date;
+    menuDate.dateObj = date;
 
     this.dates.push.apply(this.dates, [menuDate]);
     return menuDate;
+  }
+
+  public getMenuJson(): string {
+    return JSON.stringify(this, null, 2);
   }
 }

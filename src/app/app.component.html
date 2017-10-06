@@ -125,7 +125,7 @@
                     </td>
                     <td>
                       <span *ngIf="!date.editing || !date.allowEditDate">{{date.date}}</span>
-                      <span *ngIf="date.editing && date.allowEditDate">Edit: {{date.date}}</span>
+                      <span *ngIf="date.editing && date.allowEditDate"><input type="text" class="form-control" [(ngModel)]="date.dateObj" id="entryDate" name="entryDate" bsDatepicker  ></span>
                     </td>
                     <td>
                       <span *ngIf="!date.editing">{{date.entree | menuItem:menuData.entrees}}</span>
@@ -166,11 +166,17 @@
   <div class='row'>
     <div class="col-md-12">
       <div class="panel panel-default" data-role="panel">
-        <div class="panel-heading" (click)="isJsonCollapsed = !isJsonCollapsed">JSON Menu</div>
+        <div class="panel-heading">JSON Menu &nbsp;
+          <i class="fa fa-clipboard" aria-hidden="true" ngxClipboard [cbContent]="menuData.getMenuJson()" (cbOnSuccess)="copySuccess()"></i>
+          <i class="fa" [ngClass]="{'fa-expand': isJsonCollapsed, 'fa-compress': !isJsonCollapsed }" aria-hidden="true" (click)="isJsonCollapsed = !isJsonCollapsed"></i>
+          <div *ngFor="let alert of alerts">
+              <alert [type]="alert.type" [dismissOnTimeout]="alert.timeout">{{ alert.msg }}</alert>
+          </div>          
+        </div>
         <div class="panel-body" [collapse]="isJsonCollapsed">
           <div class="form-group">
             <label class="control-label-left" for="json">JSON</label>
-            <textarea id="json" type="textarea" rows="50" class="form-control">{{menuData | json}}</textarea>
+            <textarea id="json" type="textarea" rows="50" class="form-control">{{menuData.getMenuJson()}}</textarea>
           </div>
         </div>
       </div>

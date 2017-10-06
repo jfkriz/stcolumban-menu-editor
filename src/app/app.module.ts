@@ -8,6 +8,9 @@ import { ObjectValuesPipe } from './pipes/objectValuesPipe';
 import { MapValuesPipe } from './pipes/mapValuesPipe';
 import { MenuItemPipe } from './pipes/menuItemPipe';
 import { SelectModule } from 'ng2-select';
+import { BsDatepickerModule } from 'ngx-bootstrap';
+import { ClipboardModule } from 'ngx-clipboard';
+import { AlertModule } from 'ngx-bootstrap';
 
 import { AppComponent } from './app.component';
 
@@ -24,7 +27,10 @@ import { AppComponent } from './app.component';
     HttpClientModule,
     TabsModule.forRoot(),
     CollapseModule.forRoot(),
-    SelectModule
+    SelectModule,
+    BsDatepickerModule.forRoot(),
+    ClipboardModule,
+    AlertModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

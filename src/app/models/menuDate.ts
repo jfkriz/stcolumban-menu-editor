@@ -65,19 +65,28 @@ export class MenuDate extends BaseModel {
     this._treat = treat;
   }
 
-  private _date: string;
+  private _date: Date;
   set date(d: string|Date) {
-    if (typeof(d) === 'string' || Object.prototype.toString.call(d) === '[object Date]') {
-      this._date = moment(d).format('M/D/YYYY');
+    if (typeof(d) === 'string') {
+      this._date = moment(d, 'M/D/YYYY').toDate();
+    }else if (Object.prototype.toString.call(d) === '[object Date]') {
+      this._date = d;
     } else {
       this._date = undefined;
     }
   }
   get date(): string|Date {
-    return this._date;
+    return moment(this._date).format('M/D/YYYY');
   }
   get dateSort(): string {
-    return moment(this._date, 'M/D/YYYY').format('YYYY/MM/DD');
+    return moment(this._date).format('YYYY/MM/DD');
+  }
+
+  get dateObj(): Date {
+    return this._date;
+  }
+  set dateObj(date: Date) {
+    this._date = date;
   }
 
   public originalDate: Date;

@@ -12,13 +12,14 @@ import * as moment from 'moment';
   styleUrls: ['./app.component.css'],
   changeDetection: ChangeDetectionStrategy.Default
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'app';
   public isDaysCollapsed: boolean;
   public isJsonCollapsed: boolean;
   public menuUrl: string;
   public menuData: MenuData;
   public isReady: boolean;
+  public alerts: any = [];
 
   constructor(private http: HttpClient) {
     this.isDaysCollapsed = false;
@@ -150,6 +151,14 @@ export class AppComponent {
       newDate = newDate.add(1, 'd');
     } while (newDate.day() === 0 || newDate.day() === 6);
     this.editDate(this.menuData.addNewMenuDate(newDate.toDate()), true);
+  }
+
+  copySuccess() {
+    this.alerts.push({
+      type: 'success',
+      msg: 'Menu JSON was copied to the clipboard!',
+      timeout: 5000
+    });
   }
 
   ngOnInit() {
