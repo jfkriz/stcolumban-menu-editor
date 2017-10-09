@@ -11,6 +11,7 @@ import { SelectModule } from 'ng2-select';
 import { BsDatepickerModule } from 'ngx-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard';
 import { AlertModule } from 'ngx-bootstrap';
+import { TooltipModule } from 'ngx-bootstrap';
 
 import { AppComponent } from './app.component';
 
@@ -30,7 +31,8 @@ import { AppComponent } from './app.component';
     SelectModule,
     BsDatepickerModule.forRoot(),
     ClipboardModule,
-    AlertModule.forRoot()
+    AlertModule.forRoot(),
+    TooltipModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

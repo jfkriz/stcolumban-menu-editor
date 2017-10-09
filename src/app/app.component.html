@@ -10,24 +10,29 @@
   <div class="panel panel-default">
     <div class="panel-body">
       <tabset>
-        <tab heading="Entrees">
+        <tab *ngFor="let types of itemTypes" heading="{{types.title}}">
           <table class="table table-striped">
             <thead>
               <tr>
-                <th></th>
+                <th class="action"></th>
+                <th class="action"></th>
                 <th>Name</th>
                 <th>Description</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of menuData.entrees">
-                <td *ngIf="!item.editing">
-                  <i class="fa fa-pencil" aria-hidden="true" (click)="editItem(item)"></i>
-                  <i class="fa fa-trash" aria-hidden="true" (click)="deleteItem(menuData.entrees, item)"></i>
+              <tr *ngFor="let item of types.items">
+                <td *ngIf="!item.editing" class="action">
+                  <a class="btn btn-xs btn-default" (click)="editItem(item)" tooltip="Edit this menu item" href="javascript:void(0);"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                 </td>
-                <td *ngIf="item.editing">
-                  <i class="fa fa-check" aria-hidden="true" (click)="confirmEditItem(menuData.entrees, item)"></i>
-                  <i class="fa fa-ban" aria-hidden="true" (click)="cancelEditItem(item)"></i>
+                <td *ngIf="!item.editing" class="action">
+                  <a class="btn btn-xs btn-default" (click)="deleteItem(types.items, item)" tooltip="Delete this menu item" href="javascript:void(0);"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                </td>
+                <td *ngIf="item.editing" class="action">
+                  <a class="btn btn-xs btn-default" (click)="confirmEditItem(types.items, item)" tooltip="Confirm these changes" href="javascript:void(0);"><i class="fa fa-check" aria-hidden="true"></i></a>
+                </td>
+                <td *ngIf="item.editing" class="action">
+                  <a class="btn btn-xs btn-default" (click)="cancelEditItem(item)" tooltip="Cancel these changes" href="javascript:void(0);"><i class="fa fa-ban" aria-hidden="true"></i></a>
                 </td>
                 <td *ngIf="!item.editing">{{item.id}}</td>
                 <td *ngIf="!item.editing">{{item.description}}</td>
@@ -36,139 +41,75 @@
               </tr>
             </tbody>
           </table>
-          <button type="button" class="btn" (click)="addNewEntree()">Add Item</button>
-        </tab>
-        <tab heading="Veggies">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th></th>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of menuData.veggies">
-                <td *ngIf="!item.editing">
-                  <i class="fa fa-pencil" aria-hidden="true" (click)="editItem(item)"></i>
-                  <i class="fa fa-trash" aria-hidden="true" (click)="deleteItem(menuData.veggies, item)"></i>
-                </td>
-                <td *ngIf="item.editing">
-                  <i class="fa fa-check" aria-hidden="true" (click)="confirmEditItem(menuData.veggies, item)"></i>
-                  <i class="fa fa-ban" aria-hidden="true" (click)="cancelEditItem(item)"></i>
-                </td>
-                <td *ngIf="!item.editing">{{item.id}}</td>
-                <td *ngIf="!item.editing">{{item.description}}</td>
-                <td *ngIf="item.editing"><input type="text" class="form-control" [(ngModel)]="item.id" /></td>
-                <td *ngIf="item.editing"><input type="text" class="form-control" [(ngModel)]="item.description" /></td>
-              </tr>
-            </tbody>
-          </table>
-          <button type="button" class="btn" (click)="addNewVeggie()">Add Item</button>
-        </tab>
-        <tab heading="Treats">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th></th>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of menuData.treats">
-                <td *ngIf="!item.editing">
-                  <i class="fa fa-pencil" aria-hidden="true" (click)="editItem(item)"></i>
-                  <i class="fa fa-trash" aria-hidden="true" (click)="deleteItem(menuData.treats, item)"></i>
-                </td>
-                <td *ngIf="item.editing">
-                  <i class="fa fa-check" aria-hidden="true" (click)="confirmEditItem(menuData.treats, item)"></i>
-                  <i class="fa fa-ban" aria-hidden="true" (click)="cancelEditItem(item)"></i>
-                </td>
-                <td *ngIf="!item.editing">{{item.id}}</td>
-                <td *ngIf="!item.editing">{{item.description}}</td>
-                <td *ngIf="item.editing"><input type="text" class="form-control" [(ngModel)]="item.id" /></td>
-                <td *ngIf="item.editing"><input type="text" class="form-control" [(ngModel)]="item.description" /></td>
-              </tr>
-            </tbody>
-          </table>
-          <button type="button" class="btn" (click)="addNewTreat()">Add Item</button>
+          <button type="button" class="btn btn-default" (click)="types.add()">Add Item</button>
         </tab>
       </tabset>
     </div>
   </div>
-  <div class='row'>
-    <div class="col-md-12">
-      <div class="panel panel-default" data-role="panel">
-        <div class="panel-heading" (click)="isDaysCollapsed = !isDaysCollapsed">Menu Days</div>
-        <form>
-          <div class="panel-body" [collapse]="isDaysCollapsed">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>Date</th>
-                  <th>Entree</th>
-                  <th>Veggie</th>
-                  <th>Treat</th>
-                </tr>
-              </thead>
-                <tbody>
-                  <tr *ngFor="let date of menuData.dates">
-                    <td *ngIf="!date.editing">
-                      <i class="fa fa-pencil" aria-hidden="true" (click)="editDate(date)"></i>
-                      <i class="fa fa-trash" aria-hidden="true" (click)="deleteDate(date)"></i>
-                    </td>
-                    <td *ngIf="date.editing">
-                      <i class="fa fa-check" aria-hidden="true" (click)="confirmEditDate(date)"></i>
-                      <i class="fa fa-ban" aria-hidden="true" (click)="cancelEditDate(date)"></i>
-                    </td>
-                    <td>
-                      <span *ngIf="!date.editing">{{date.date}}</span>
-                      <span *ngIf="date.editing"><input type="text" class="form-control" [(ngModel)]="date.dateObj" id="entryDate" name="entryDate" bsDatepicker  ></span>
-                    </td>
-                    <td>
-                      <span *ngIf="!date.editing">{{date.entree | menuItem:menuData.entrees}}</span>
-                      <ng-select *ngIf="date.editing"
-                        [multiple]="true"
-                        [items]="menuData.entrees"
-                        (data)="updateMenuDate($event, date.entreesObj)"
-                        [active]="date.entrees ? date.entreesObj : undefined">
-                      </ng-select>
-                    </td>
-                    <td>
-                      <span *ngIf="!date.editing">{{date.veggie | menuItem:menuData.veggies}}</span>
-                      <ng-select *ngIf="date.editing"
-                        [multiple]="false"
-                        [items]="menuData.veggies"
-                        (data)="updateMenuDate($event, date.veggieObj)"
-                        [active]="date.veggie ? [ date.veggieObj ] : undefined">
-                      </ng-select>
-                    </td>
-                    <td>
-                      <span *ngIf="!date.editing">{{date.treat | menuItem:menuData.treats}}</span>
-                      <ng-select *ngIf="date.editing"
-                        [multiple]="false"
-                        [items]="menuData.treats"
-                        (data)="updateMenuDate($event, date.treatObj)"
-                        [active]="date.treat ? [ date.treatObj ] : undefined">
-                      </ng-select>
-                    </td>
-                  </tr>
-              </tbody>
-            </table>
-            <button type="button" class="btn" (click)="addNewMenuDate()">Add Date</button>
-          </div>
-        </form>
-      </div>
+  <div class="panel panel-default" data-role="panel">
+    <div class="panel-heading" (click)="isDaysCollapsed = !isDaysCollapsed">Menu Days</div>
+    <div class="panel-body" [collapse]="isDaysCollapsed">
+      <!-- <form> -->
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th class="action"></th>
+            <th class="action"></th>
+            <th>Date</th>
+            <th>Entree</th>
+            <th>Veggie</th>
+            <th>Treat</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let date of menuData.dates">
+            <td *ngIf="!date.editing" class="action">
+              <a class="btn btn-xs btn-default" (click)="editDate(date)" tooltip="Edit this day's menu" href="javascript:void(0);"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+            </td>
+            <td *ngIf="!date.editing" class="action">
+              <a class="btn btn-xs btn-default" (click)="deleteDate(date)" tooltip="Delete this day's menu" href="javascript:void(0);"><i class="fa fa-trash" aria-hidden="true"></i></a>
+            </td>
+            <td *ngIf="date.editing" class="action">
+              <a class="btn btn-xs btn-default" (click)="confirmEditDate(date)" tooltip="Confirm these changes" href="javascript:void(0);"><i class="fa fa-check" aria-hidden="true"></i></a>
+            </td>
+            <td *ngIf="date.editing" class="action">
+              <a class="btn btn-xs btn-default" (click)="cancelEditDate(date)" tooltip="Cancel these changes" href="javascript:void(0);"><i class="fa fa-ban" aria-hidden="true"></i></a>
+            </td>
+            <td>
+              <span *ngIf="!date.editing">{{date.date}}</span>
+              <span *ngIf="date.editing"><input type="text" class="form-control" [(ngModel)]="date.dateObj" id="entryDate" name="entryDate" bsDatepicker  ></span>
+            </td>
+            <td>
+              <span *ngIf="!date.editing">{{date.entree | menuItem:menuData.entrees}}</span>
+              <ng-select *ngIf="date.editing" [multiple]="true" [items]="menuData.entrees" (data)="updateMenuDate($event, date.entreesObj)"
+                [active]="date.entrees ? date.entreesObj : undefined">
+              </ng-select>
+            </td>
+            <td>
+              <span *ngIf="!date.editing">{{date.veggie | menuItem:menuData.veggies}}</span>
+              <ng-select *ngIf="date.editing" [multiple]="false" [items]="menuData.veggies" (data)="updateMenuDate($event, date.veggieObj)"
+                [active]="date.veggie ? [ date.veggieObj ] : undefined">
+              </ng-select>
+            </td>
+            <td>
+              <span *ngIf="!date.editing">{{date.treat | menuItem:menuData.treats}}</span>
+              <ng-select *ngIf="date.editing" [multiple]="false" [items]="menuData.treats" (data)="updateMenuDate($event, date.treatObj)"
+                [active]="date.treat ? [ date.treatObj ] : undefined">
+              </ng-select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button type="button" class="btn btn-default" (click)="addNewMenuDate()">Add Date</button>
+      <!-- </form> -->
     </div>
   </div>
   <div class='row'>
     <div class="col-md-12">
       <div class="panel panel-default" data-role="panel">
         <div class="panel-heading">JSON Menu &nbsp;
-          <i class="fa fa-clipboard" aria-hidden="true" ngxClipboard [cbContent]="menuData.getMenuJson()" (cbOnSuccess)="copySuccess()"></i>
-          <i class="fa" [ngClass]="{'fa-expand': isJsonCollapsed, 'fa-compress': !isJsonCollapsed }" aria-hidden="true" (click)="isJsonCollapsed = !isJsonCollapsed"></i>
+          <a class="btn btn-xs btn-default" ngxClipboard [cbContent]="menuData.getMenuJson()" (cbOnSuccess)="copySuccess()" tooltip="Copy the JSON to the clipboard" href="javascript:void(0);"><i class="fa fa-clipboard" aria-hidden="true"></i></a>
+          <a class="btn btn-xs btn-default" (click)="isJsonCollapsed = !isJsonCollapsed;" [tooltip]="isJsonCollapsed ? 'Expand' : 'Collapse'" href="javascript:void(0);"><i class="fa" [ngClass]="{'fa-expand': isJsonCollapsed, 'fa-compress': !isJsonCollapsed }" aria-hidden="true"></i></a>
           <div *ngFor="let alert of alerts">
               <alert [type]="alert.type" [dismissOnTimeout]="alert.timeout">{{ alert.msg }}</alert>
           </div>          

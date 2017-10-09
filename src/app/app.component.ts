@@ -20,6 +20,8 @@ export class AppComponent implements OnInit {
   public menuData: MenuData;
   public isReady: boolean;
   public alerts: any = [];
+  public _this = this;
+  public itemTypes: any = [];
 
   constructor(private http: HttpClient) {
     this.isDaysCollapsed = false;
@@ -167,10 +169,35 @@ export class AppComponent implements OnInit {
   }
 
   public loadMenu() {
+    const thisRef = this;
     this.http.get(this.menuUrl).subscribe(data => {
       const menu = new MenuData(data);
       this.menuData = menu;
       this.isReady = true;
+
+      this.itemTypes = [
+        {
+          title: 'Entrees',
+          items: thisRef.menuData.entrees,
+          add: () => {
+            thisRef.addNewEntree();
+          }
+        },
+        {
+          title: 'Veggies',
+          items: thisRef.menuData.veggies,
+          add: () => {
+            thisRef.addNewVeggie();
+          }
+        },
+        {
+          title: 'Treats',
+          items: thisRef.menuData.treats,
+          add: () => {
+            thisRef.addNewTreat();
+          }
+        }
+      ];
     });
   }
 }

@@ -2,3 +2,8 @@
 @import "~bootstrap/dist/css/bootstrap.min.css";
 @import "~font-awesome/css/font-awesome.css";
 @import "~ngx-bootstrap/datepicker/bs-datepicker.css";
+
+th.action, td.action {
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+}
