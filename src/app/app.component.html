@@ -88,13 +88,13 @@
             <td>
               <span *ngIf="!date.editing">{{date.veggie | menuItem:menuData.veggies}}</span>
               <ng-select *ngIf="date.editing" [multiple]="false" [items]="menuData.veggies" (data)="updateMenuDate($event, date.veggieObj)"
-                [active]="date.veggie ? [ date.veggieObj ] : undefined">
+                [active]="date.veggie ? [ date.veggieObj ] : undefined" [allowClear]="true">
               </ng-select>
             </td>
             <td>
               <span *ngIf="!date.editing">{{date.treat | menuItem:menuData.treats}}</span>
               <ng-select *ngIf="date.editing" [multiple]="false" [items]="menuData.treats" (data)="updateMenuDate($event, date.treatObj)"
-                [active]="date.treat ? [ date.treatObj ] : undefined">
+                [active]="date.treat ? [ date.treatObj ] : undefined" [allowClear]="true">
               </ng-select>
             </td>
           </tr>
@@ -112,7 +112,7 @@
           <a class="btn btn-xs btn-default" (click)="isJsonCollapsed = !isJsonCollapsed;" [tooltip]="isJsonCollapsed ? 'Expand' : 'Collapse'" href="javascript:void(0);"><i class="fa" [ngClass]="{'fa-expand': isJsonCollapsed, 'fa-compress': !isJsonCollapsed }" aria-hidden="true"></i></a>
           <div *ngFor="let alert of alerts">
               <alert [type]="alert.type" [dismissOnTimeout]="alert.timeout">{{ alert.msg }}</alert>
-          </div>          
+          </div>
         </div>
         <div class="panel-body" [collapse]="isJsonCollapsed">
           <div class="form-group">
